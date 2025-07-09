@@ -1,4 +1,6 @@
-wwwroot\app.css
-wwwroot\bootstrap\bootstrap.min.css
-wwwroot\bootstrap\bootstrap.min.css.map
-wwwroot\favicon.png
+wwwroot\bootstrap\css\bootstrap.min.css
+wwwroot\bootstrap\css\bootstrap.min.css.map
+wwwroot\bootstrap\js\bootstrap.bundle.min.js
+wwwroot\bootstrap\js\bootstrap.bundle.min.js.map
+wwwroot\css\app.css
+wwwroot\images\icons\favicon.png
