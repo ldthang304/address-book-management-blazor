@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AddressBookManagement.Models
 {
-    [Table("Tasks")]
-    public class Task : Common
+    [Table("TodoTasks")]
+    public class TodoTask : Common
     {
         [Key]
         public int Id { get; set; }

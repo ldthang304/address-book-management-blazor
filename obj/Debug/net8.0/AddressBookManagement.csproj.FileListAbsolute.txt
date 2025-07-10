@@ -126,10 +126,10 @@ D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debu
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\staticwebassets.build.json.cache
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\staticwebassets.development.json
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\AddressB.F4B01386.Up2Date
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\AddressBookManagement.dll
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\refint\AddressBookManagement.dll
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\AddressBookManagement.pdb
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\AddressBookManagement.genruntimeconfig.cache
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\ref\AddressBookManagement.dll
+D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

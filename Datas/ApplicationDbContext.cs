@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AddressBookManagement.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace AddressBookManagement.Models
+namespace AddressBookManagement.Datas
 {
     public class ApplicationDbContext : DbContext
     {
@@ -9,10 +10,8 @@ namespace AddressBookManagement.Models
         public DbSet<Note> Notes { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Phone> Phones { get; set; }
-        public DbSet<PhoneType> PhoneTypes { get; set; }
-        public DbSet<Task> Tasks { get; set; }
+        public DbSet<TodoTask> Tasks { get; set; }
         public DbSet<Website> Websites { get; set; }
-        public DbSet<WebsiteType> WebsiteTypes { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             
@@ -36,7 +35,7 @@ namespace AddressBookManagement.Models
                 .OnDelete(DeleteBehavior.Cascade);
 
             //One Contact has many Tasks
-            modelBuilder.Entity<Task>()
+            modelBuilder.Entity<Models.TodoTask>()
                 .HasOne(t => t.Contact)
                 .WithMany(c => c.Tasks)
                 .HasForeignKey(t => t.ContactId)
@@ -56,18 +55,6 @@ namespace AddressBookManagement.Models
                 .HasForeignKey(c => c.OrganizationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //One Phone Type has many Phones
-            modelBuilder.Entity<Phone>()
-                .HasOne(p => p.PhoneType)
-                .WithMany(pt => pt.Phones)
-                .HasForeignKey(p => p.PhoneTypeId)
-                .OnDelete(DeleteBehavior.Cascade);
-            //One Website Type has many Websites
-            modelBuilder.Entity<Website>()
-                .HasOne(w => w.WebsiteType)
-                .WithMany(wt => wt.Websites)
-                .HasForeignKey(w => w.WebsiteTypeId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

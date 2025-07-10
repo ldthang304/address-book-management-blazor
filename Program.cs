@@ -1,6 +1,10 @@
 
 using AddressBookManagement;
-using AddressBookManagement.Models;
+using AddressBookManagement.Datas;
+using AddressBookManagement.Datas.Repositories;
+using AddressBookManagement.Datas.Repositories.Implements;
+using AddressBookManagement.Services;
+using AddressBookManagement.Services.Implements;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +18,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+//Add Repository
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+//Add Services
+builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+builder.Services.AddScoped<IMasterService, MasterService>();
 
 var app = builder.Build();
 

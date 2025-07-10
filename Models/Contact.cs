@@ -33,7 +33,7 @@ namespace AddressBookManagement.Models
         public ICollection<Website>? Websites { get; set; }
         public int? OrganizationId { get; set; }
         public Organization? Organization { get; set; }
-        public ICollection<Task>? Tasks { get; set; }
+        public ICollection<TodoTask>? Tasks { get; set; }
         public ICollection<Note>? Notes { get; set; }
 
     }

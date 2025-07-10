@@ -5,19 +5,18 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e23116de-4695-4b2a-99a2-43a356a190cf</UserSecretsId>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Commons\Constants\" />
     <Folder Include="Commons\Loggings\" />
-    <Folder Include="Datas\Repositories\" />
     <Folder Include="DTOs\" />
     <Folder Include="Configs\" />
     <Folder Include="Exceptions\" />
-    <Folder Include="Services\" />
-    <Folder Include="Services\" />
     <Folder Include="Shared\Components\" />
     <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\resources\images\icons\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +25,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
