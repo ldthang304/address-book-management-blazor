@@ -27,7 +27,7 @@ namespace AddressBookManagement.Services.Implements
 
         public async Task<Contact?> GetByIdAsync(int id)
         {
-            return await _contactRepository.GetByIdAsync(id);
+            return await _contactRepository.Query().Include(c => c.Phones).Include(c => c.Websites).FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<List<Contact>> GetFavoritesAsync()

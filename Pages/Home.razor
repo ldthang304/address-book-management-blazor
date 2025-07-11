@@ -1,8 +1,18 @@
 ﻿@page "/"
-
+@rendermode InteractiveServer
+@inject IToastService ToastService
+@inject ToastNavigationService ToastNavigationService
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
+<BlazoredToasts/>
+hello
+@code {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        var (message, level) = ToastNavigationService.ConsumeMessage();
+        if (!string.IsNullOrEmpty(message))
+        {
+            ToastService.ShowToast(level, message);
+        }
+    }
+}

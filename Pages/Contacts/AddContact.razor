@@ -1,16 +1,17 @@
 ﻿@page "/contact/{contactId:int?}"
 @rendermode InteractiveServer
-@inject NavigationManager Navigation
-@inject IContactService ContactService
-@inject IOrganizationService OrganizationService
 
 @if (!isInitialized)
 {
-    <p>Loading...</p> <!-- or spinner -->
+    <div class="d-flex justify-content-center mt-3">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
 }
 else
 {
-    <EditForm Model="contact" OnValidSubmit="Save">
+    <EditForm Model="contact" OnValidSubmit="SaveAsync">
     <div class="container mt-5">
         <!-- Header (with Image Binding) -->
         <div class="d-flex align-items-center mb-4">

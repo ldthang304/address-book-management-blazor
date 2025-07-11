@@ -133,3 +133,11 @@ D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debu
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\AddressBookManagement.genruntimeconfig.cache
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\ref\AddressBookManagement.dll
 D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\bin\Debug\net8.0\Blazored.Toast.dll
+D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\bin\Debug\net8.0\Microsoft.AspNetCore.Authorization.dll
+D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\bin\Debug\net8.0\Microsoft.AspNetCore.Components.dll
+D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Forms.dll
+D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Web.dll
+D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\bin\Debug\net8.0\Microsoft.AspNetCore.Metadata.dll
+D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+D:\Workspace\PRN222_Project\AddressBookManagement\AddressBookManagement\bin\Debug\net8.0\Microsoft.JSInterop.dll

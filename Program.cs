@@ -5,6 +5,9 @@ using AddressBookManagement.Datas.Repositories;
 using AddressBookManagement.Datas.Repositories.Implements;
 using AddressBookManagement.Services;
 using AddressBookManagement.Services.Implements;
+using AddressBookManagement.Services.Shared;
+using Blazored.Toast;
+using Blazored.Toast.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +30,11 @@ builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 builder.Services.AddScoped<IMasterService, MasterService>();
 
+//Add Blazor Toast and Service
+builder.Services.AddSingleton<ToastNavigationService>();
+builder.Services.AddBlazoredToast();
+
+//Build the app
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

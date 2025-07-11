@@ -1,6 +1,8 @@
 using AddressBookManagement.Models;
 using AddressBookManagement.Services;
 using AddressBookManagement.Services.Implements;
+using AddressBookManagement.Services.Shared;
+using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace AddressBookManagement.Pages.Contacts
@@ -9,12 +11,18 @@ namespace AddressBookManagement.Pages.Contacts
     {
         //Initialize flag 
         private bool isInitialized = false;
+        //Inject Services
         [Inject]
-        private IContactService contactService { get; set; } = null!;
+        private IContactService ContactService { get; set; } = null!;
         [Inject]
-        private IOrganizationService organizationService { get; set; } = null!;
+        private IOrganizationService OrganizationService { get; set; } = null!;
         [Inject]
-        private IMasterService masterService { get; set; } = null!;
+        private IMasterService MasterService { get; set; } = null!;
+        [Inject]
+        private ToastNavigationService ToastNavigationService { get; set; } = null!;
+        [Inject] 
+        private NavigationManager NavigationManager { get; set; } = null!;
+        
         [Parameter]
         //Contact Id from route
         public int? ContactId { get; set; }
@@ -36,13 +44,13 @@ namespace AddressBookManagement.Pages.Contacts
             organizations = new List<Organization>();
             contact = new Contact();
 
-            masters = await masterService.GetAllAsync();
+            masters = await MasterService.GetAllAsync();
             GroupMasters();
-            organizations = await organizationService.GetAllAsync();
+            organizations = await OrganizationService.GetAllAsync();
             
             if (ContactId.HasValue)
             {
-                contact = await contactService.GetByIdAsync(ContactId.Value);
+                contact = await ContactService.GetByIdAsync(ContactId.Value);
             }
             //Finish initializing
             isInitialized = true;
@@ -55,9 +63,22 @@ namespace AddressBookManagement.Pages.Contacts
                 .ToDictionary(g => g.Key, g => g.ToList());
         }
 
-        private void Save()
+        //Save Contact into database
+        private async Task SaveAsync()
         {
-            Console.WriteLine(contact);
+            if (!ContactId.HasValue && contact != null)
+            {
+                await ContactService.AddAsync(contact);
+                ToastNavigationService.SetMessage("Contact added successfully", ToastLevel.Success);
+            }
+            else
+            {
+                await ContactService.UpdateAsync(contact!);
+                ToastNavigationService.SetMessage("Contact updated successfully", ToastLevel.Success);
+
+            }
+            //Navigate to contact list after added
+            NavigationManager.NavigateTo("/");
         }
 
         private bool IsPhoneAdded(Master phoneType)
