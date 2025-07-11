@@ -1,3 +1,60 @@
+/* _content/AddressBookManagement/Shared/Components/ContactCard.razor.rz.scp.css */
+
+.card[b-z59tb3ncyl] {
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.contact-card-hover:hover[b-z59tb3ncyl] {
+    background-color: lightblue; /* light gray */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.contact-card-hover:hover .edit-icon[b-z59tb3ncyl] {
+    display: inline-block !important;
+}
+/* _content/AddressBookManagement/Shared/Components/FilterBar.razor.rz.scp.css */
+.filter-bar[b-5j3glqc1fc] {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+    .filter-bar a:hover[b-5j3glqc1fc] {
+        text-decoration: underline;
+    }
+
+    .filter-bar .btn-link[b-5j3glqc1fc] {
+        padding: 0;
+        font-weight: 500;
+    }
+
+        .filter-bar .btn-link:disabled[b-5j3glqc1fc] {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+/* _content/AddressBookManagement/Shared/Components/TookBar.razor.rz.scp.css */
+.filter-bar[b-us5ix7fdtt] {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+    .filter-bar a:hover[b-us5ix7fdtt] {
+        text-decoration: underline;
+    }
+
+    .filter-bar .btn-link[b-us5ix7fdtt] {
+        padding: 0;
+        font-weight: 500;
+    }
+
+        .filter-bar .btn-link:disabled[b-us5ix7fdtt] {
+            opacity: 0.5;
+            pointer-events: none;
+        }
 /* _content/AddressBookManagement/Shared/Layouts/MainLayout.razor.rz.scp.css */
 .page[b-fsdaahs8zv] {
     position: relative;

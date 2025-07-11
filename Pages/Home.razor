@@ -1,18 +1,10 @@
 ﻿@page "/"
 @rendermode InteractiveServer
-@inject IToastService ToastService
-@inject ToastNavigationService ToastNavigationService
+
 <PageTitle>Home</PageTitle>
 
 <BlazoredToasts/>
 hello
 @code {
-    protected override void OnAfterRender(bool firstRender)
-    {
-        var (message, level) = ToastNavigationService.ConsumeMessage();
-        if (!string.IsNullOrEmpty(message))
-        {
-            ToastService.ShowToast(level, message);
-        }
-    }
+    
 }

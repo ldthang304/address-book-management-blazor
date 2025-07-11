@@ -4,13 +4,14 @@ using AddressBookManagement.Services.Implements;
 using AddressBookManagement.Services.Shared;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace AddressBookManagement.Pages.Contacts
 {
     public partial class AddContact
     {
         //Initialize flag 
-        private bool isInitialized = false;
+        private bool _isInitialized = false;
         //Inject Services
         [Inject]
         private IContactService ContactService { get; set; } = null!;
@@ -28,11 +29,11 @@ namespace AddressBookManagement.Pages.Contacts
         public int? ContactId { get; set; }
 
         //Contact to make operations on
-        private Contact? contact;
+        private Contact? _contact;
         
-        private List<Organization>? organizations;
+        private List<Organization>? _organizations;
 
-        private List<Master>? masters;
+        private List<Master>? _masters;
 
         //MasterMap after grouping all masters
         private Dictionary<string, List<Master>>? MasterMap;
@@ -40,25 +41,25 @@ namespace AddressBookManagement.Pages.Contacts
         protected override async Task OnInitializedAsync()
         {
             //Initialize
-            masters = new List<Master>();
-            organizations = new List<Organization>();
-            contact = new Contact();
+            _masters = new List<Master>();
+            _organizations = new List<Organization>();
+            _contact = new Contact();
 
-            masters = await MasterService.GetAllAsync();
+            _masters = await MasterService.GetAllAsync();
             GroupMasters();
-            organizations = await OrganizationService.GetAllAsync();
+            _organizations = await OrganizationService.GetAllAsync();
             
             if (ContactId.HasValue)
             {
-                contact = await ContactService.GetByIdAsync(ContactId.Value);
+                _contact = await ContactService.GetByIdAsync(ContactId.Value);
             }
             //Finish initializing
-            isInitialized = true;
+            _isInitialized = true;
         }
 
         private void GroupMasters()
         {
-            MasterMap = masters
+            MasterMap = _masters
                 .GroupBy(m => m.TypeName)
                 .ToDictionary(g => g.Key, g => g.ToList());
         }
@@ -66,69 +67,73 @@ namespace AddressBookManagement.Pages.Contacts
         //Save Contact into database
         private async Task SaveAsync()
         {
-            if (!ContactId.HasValue && contact != null)
+            if (!ContactId.HasValue && _contact != null)
             {
-                await ContactService.AddAsync(contact);
+                await ContactService.AddAsync(_contact);
                 ToastNavigationService.SetMessage("Contact added successfully", ToastLevel.Success);
             }
             else
             {
-                await ContactService.UpdateAsync(contact!);
+                await ContactService.UpdateAsync(_contact!);
                 ToastNavigationService.SetMessage("Contact updated successfully", ToastLevel.Success);
 
             }
             //Navigate to contact list after added
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("contacts");
         }
 
         private bool IsPhoneAdded(Master phoneType)
         {
-            return contact?.Phones?.FirstOrDefault(p => p.PhoneType == phoneType.TypeKey) != null;
+            return _contact?.Phones?.FirstOrDefault(p => p.PhoneType == phoneType.TypeKey) != null;
         }
 
         private void AddPhoneWithType(Master type)
         {
-            if (contact?.Phones == null)
+            if (_contact?.Phones == null)
             {
-                contact?.Phones = new List<Phone>();
+                _contact?.Phones = new List<Phone>();
             }
-            contact?.Phones?.Add(new Phone()
+            _contact?.Phones?.Add(new Phone()
             {
                 Number = "",
                 PhoneType = type.TypeKey,
-                ContactId = contact.Id,
-                Contact = contact
+                ContactId = _contact.Id,
+                Contact = _contact
 
             });
         }
         private void RemovePhone(Phone phone)
         {
-            contact?.Phones?.Remove(phone);
+            _contact?.Phones?.Remove(phone);
         }
 
         private bool IsWebsiteAdded(Master websiteType)
         {
-            return contact?.Websites?.FirstOrDefault(w => w.WebsiteType == websiteType.TypeKey) != null;
+            return _contact?.Websites?.FirstOrDefault(w => w.WebsiteType == websiteType.TypeKey) != null;
         }
 
         private void AddWebsiteWithType(Master type)
         {
-            if (contact?.Websites == null)
+            if (_contact?.Websites == null)
             {
-                contact?.Websites = new List<Website>();
+                _contact?.Websites = new List<Website>();
             }
 
-            contact?.Websites?.Add(new Website()
+            _contact?.Websites?.Add(new Website()
             {
                 Url = "",
-                ContactId = contact.Id,
+                ContactId = _contact.Id,
                 WebsiteType = type.TypeKey,
-                Contact = contact
+                Contact = _contact
             });
         }
         private void RemoveWebsite(Website website)
         {
-            contact?.Websites?.Remove(website);
+            _contact?.Websites?.Remove(website);
+        }
+        private void BackToList(MouseEventArgs args)
+        {
+            NavigationManager.NavigateTo("contacts");
         }
     }
 }

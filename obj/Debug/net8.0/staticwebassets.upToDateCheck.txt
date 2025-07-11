@@ -3,6 +3,6 @@ wwwroot\bootstrap\css\bootstrap.min.css.map
 wwwroot\bootstrap\js\bootstrap.bundle.min.js
 wwwroot\bootstrap\js\bootstrap.bundle.min.js.map
 wwwroot\css\app.css
-wwwroot\resources\sql\master-seed.sql
 wwwroot\resources\sql\contact-seeding.sql
+wwwroot\resources\sql\master-seed.sql
 wwwroot\resources\sql\organization-seeding.sql

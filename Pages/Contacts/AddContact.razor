@@ -1,7 +1,7 @@
-﻿@page "/contact/{contactId:int?}"
+﻿@page "/contacts/add/{contactId:int?}"
 @rendermode InteractiveServer
 
-@if (!isInitialized)
+@if (!_isInitialized)
 {
     <div class="d-flex justify-content-center mt-3">
         <div class="spinner-border text-primary" role="status">
@@ -11,53 +11,53 @@
 }
 else
 {
-    <EditForm Model="contact" OnValidSubmit="SaveAsync">
+    <EditForm Model="_contact" OnValidSubmit="SaveAsync">
     <div class="container mt-5">
         <!-- Header (with Image Binding) -->
         <div class="d-flex align-items-center mb-4">
             <div class="rounded-circle overflow-hidden bg-light border" style="width: 60px; height: 60px;">
-                <img src="@(!string.IsNullOrEmpty(contact.Image) ? contact.Image : "https://via.placeholder.com/60")" alt="contact"
+                <img src="@(!string.IsNullOrEmpty(_contact?.Image) ? _contact.Image : "https://via.placeholder.com/60")" alt="contact"
                      class="w-100 h-100 object-fit-cover" />
             </div>
-            <h2 class="ms-3 mb-0">Contact</h2>
+            <h2 class="ms-3 mb-0">@_contact?.LastName</h2>
         </div>
 
         <!-- Contact Info Section -->
         <h5 class="mb-3">Contact Info</h5>
 
         <!-- Hidden input for image -->
-        <input type="hidden" @bind="contact.Image" />
+        <input type="hidden" @bind="_contact?.Image" />
 
         <div class="row g-3">
             <div class="col-md-6">
                 <div class="form-floating">
-                    <InputText class="form-control" id="firstName" @bind-Value="contact.FirstName" required placeholder="First name" />
+                    <InputText class="form-control" id="firstName" @bind-Value="_contact.FirstName" required placeholder="First name" />
                     <label for="firstName">First name</label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <InputText class="form-control" id="lastName" @bind-Value="contact.LastName" required placeholder="Last name" />
+                    <InputText class="form-control" id="lastName" @bind-Value="_contact.LastName" required placeholder="Last name" />
                     <label for="lastName">Last name <span class="text-danger">*</span></label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <InputText class="form-control" id="nickName" @bind-Value="contact.NickName" required placeholder="Nick name" />
+                    <InputText class="form-control" id="nickName" @bind-Value="_contact.NickName" required placeholder="Nick name" />
                     <label for="nickName">Nick name <span class="text-danger">*</span></label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <InputText class="form-control" id="jobTitle" @bind-Value="contact.JobTitle" placeholder="Job Title" />
+                    <InputText class="form-control" id="jobTitle" @bind-Value="_contact.JobTitle" placeholder="Job Title" />
                     <label for="jobTitle">Job Title</label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <select class="form-select" id="organization" @bind="contact.OrganizationId">
+                    <select class="form-select" id="organization" @bind="_contact.OrganizationId">
                         <option disabled>Select organization</option>
-                        @foreach (var o in organizations!)
+                        @foreach (var o in _organizations!)
                         {
                             <option value="@o.Id">@o.Name</option>
                         }
@@ -67,9 +67,9 @@ else
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <select class="form-select" id="department" @bind="contact.Department">
+                    <select class="form-select" id="department" @bind="_contact.Department">
                         <option disabled>Select Department</option>
-                        @foreach (var d in MasterMap["Department"])
+                        @foreach (var d in MasterMap!["Department"])
                         {
                             <option value="@d.TypeKey">@d.TypeValue</option>
                         }
@@ -79,25 +79,25 @@ else
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <InputText class="form-control" id="personalEmail" @bind-Value="contact.PersonalEmail" placeholder="Personal Email" />
+                    <InputText class="form-control" id="personalEmail" @bind-Value="_contact.PersonalEmail" placeholder="Personal Email" />
                     <label for="personalEmail">Personal Email</label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <InputText class="form-control" id="workEmail" @bind-Value="contact.WorkEmail" placeholder="Work Email" />
+                    <InputText class="form-control" id="workEmail" @bind-Value="_contact.WorkEmail" placeholder="Work Email" />
                     <label for="workEmail">Work Email</label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <InputDate class="form-control" id="birthday" @bind-Value="contact.BirthDay" />
+                    <InputDate class="form-control" id="birthday" @bind-Value="_contact.BirthDay" />
                     <label for="birthday">BirthDay</label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <select class="form-select" id="gender" @bind="contact.Gender">
+                    <select class="form-select" id="gender" @bind="_contact.Gender">
                         <option disabled>Select gender</option>
                         @foreach (var g in MasterMap["Gender"])
                         {
@@ -109,7 +109,7 @@ else
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <select class="form-select" id="group" @bind="contact.Group">
+                    <select class="form-select" id="group" @bind="_contact.Group">
                         <option disabled>Select group</option>
                         @foreach (var g in MasterMap["Group"])
                         {
@@ -121,7 +121,7 @@ else
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <select class="form-select" id="relationship" @bind="contact.Relationship">
+                    <select class="form-select" id="relationship" @bind="_contact.Relationship">
                         <option disabled>Select relationship</option>
                         @foreach (var r in MasterMap["Relationship"])
                         {
@@ -133,13 +133,13 @@ else
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <InputText class="form-control" id="homeAddress" @bind-Value="contact.HomeAddress" placeholder="Home Address" />
+                    <InputText class="form-control" id="homeAddress" @bind-Value="_contact.HomeAddress" placeholder="Home Address" />
                     <label for="homeAddress">Home Address</label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
-                    <InputText class="form-control" id="workAddress" @bind-Value="contact.WorkAddress" placeholder="Work Address" />
+                    <InputText class="form-control" id="workAddress" @bind-Value="_contact.WorkAddress" placeholder="Work Address" />
                     <label for="workAddress">Work Address</label>
                 </div>
             </div>
@@ -165,12 +165,12 @@ else
             </ul>
         </div>
 
-        @if (contact.Phones?.Count > 0)
+        @if (_contact.Phones?.Count > 0)
         {
             <div>
                 <h6 class="mb-3">Added Phones:</h6>
                 <div class="row g-2">
-                    @foreach (var phone in contact.Phones)
+                    @foreach (var phone in _contact.Phones)
                     {
                         Master? phoneTypeMaster = MasterMap["PhoneType"].FirstOrDefault(m => m.TypeKey == phone.PhoneType);
                         <div class="col-12">
@@ -211,12 +211,12 @@ else
                 }
             </ul>
         </div>
-        @if (contact.Websites?.Count() > 0)
+        @if (_contact.Websites?.Count() > 0)
         {
             <div>
                 <h6 class="mb-3">Added Websites:</h6>
                 <div class="row g-2">
-                    @foreach (var website in contact.Websites)
+                    @foreach (var website in _contact.Websites)
                     {
                         Master? websiteTypeMaster = MasterMap["WebsiteType"].FirstOrDefault(m => m.TypeKey == website.WebsiteType);
                         <div class="col-12">
@@ -241,13 +241,9 @@ else
                 <i class="bi bi-save me-1"></i> Save & Close
             </button>
             <div class="btn-group">
-                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i> More
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" @onclick="BackToList">
+                     Back
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#">Duplicate</a></li>
-                    <li><a class="dropdown-item" href="#">Archive</a></li>
-                </ul>
             </div>
         </div>
     </div>
