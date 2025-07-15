@@ -6,3 +6,4 @@ wwwroot\css\app.css
 wwwroot\resources\sql\contact-seeding.sql
 wwwroot\resources\sql\master-seed.sql
 wwwroot\resources\sql\organization-seeding.sql
+wwwroot\resources\sql\todotask-seeding.sql

@@ -1,4 +1,5 @@
 ﻿using AddressBookManagement.Models;
+using AddressBookManagement.ViewModels;
 
 namespace AddressBookManagement.Services
 {
@@ -10,5 +11,9 @@ namespace AddressBookManagement.Services
         Task UpdateAsync(Master master);
         Task DeleteAsync(int id);
         Task RestoreAsync(int id);
+        
+        //Get Master by Type Name
+        Task<List<Master>> GetByTypeNameAsync(string typeName);
+        
     }
 }

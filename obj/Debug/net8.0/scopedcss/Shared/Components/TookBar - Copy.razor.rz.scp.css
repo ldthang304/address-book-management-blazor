@@ -1,19 +1,19 @@
-.filter-bar[b-us5ix7fdtt] {
+.filter-bar[b-xxfw7ra34n] {
     border-bottom: 1px solid #e0e0e0;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
 }
 
-    .filter-bar a:hover[b-us5ix7fdtt] {
+    .filter-bar a:hover[b-xxfw7ra34n] {
         text-decoration: underline;
     }
 
-    .filter-bar .btn-link[b-us5ix7fdtt] {
+    .filter-bar .btn-link[b-xxfw7ra34n] {
         padding: 0;
         font-weight: 500;
     }
 
-        .filter-bar .btn-link:disabled[b-us5ix7fdtt] {
+        .filter-bar .btn-link:disabled[b-xxfw7ra34n] {
             opacity: 0.5;
             pointer-events: none;
         }

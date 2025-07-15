@@ -12,6 +12,7 @@ namespace AddressBookManagement.Models
         public int? Type { get; set; }
         public DateTime? DueDate { get; set; }
         public string? Note { get; set; }
+        public bool IsCompleted { get; set; } = false;
 
         //Navigation properties
         public int? ContactId { get; set; }

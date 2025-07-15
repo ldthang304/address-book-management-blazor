@@ -29,9 +29,17 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 builder.Services.AddScoped<IMasterService, MasterService>();
+builder.Services.AddScoped<ITodoTaskService, TodoTaskService>();
+builder.Services.AddScoped<IWebsiteService, WebsiteService>();
+builder.Services.AddScoped<IReminderService, ReminderService>();
+
+//Reminder watcher
+builder.Services.AddScoped<ReminderWatcher>();
+
 
 //Add Blazor Toast and Service
 builder.Services.AddSingleton<ToastNavigationService>();
+builder.Services.AddSingleton<FilterService>();
 builder.Services.AddBlazoredToast();
 
 //Build the app

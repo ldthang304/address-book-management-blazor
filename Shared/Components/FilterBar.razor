@@ -1,26 +1,68 @@
-﻿<div class="container-fluid bg-white border rounded shadow-sm p-3 d-flex flex-wrap gap-2 align-items-center justify-content-between">
+﻿@inject IOrganizationService OrganizationService
+@inject IMasterService MasterService
+@inject FilterService FilterService
 
-    <div class="input-group" style="max-width: 200px;">
-        <input type="text" class="form-control" placeholder="Search">
-        <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+
+<EditForm Model="contactFilter" OnValidSubmit="ApplyFilterAsync">
+    <div class="container-fluid bg-white border rounded shadow-sm p-3 d-flex flex-wrap gap-2 align-items-center justify-content-between">
+
+        <InputText class="form-control" placeholder="Name" @bind-Value="contactFilter.NameFilter" style="max-width: 190px;" />
+
+        <InputText class="form-control" placeholder="Job Title" @bind-Value="contactFilter.JobTitleFilter" style="max-width: 190px;" />
+
+        <InputSelect class="form-select" @bind-Value="contactFilter.OrganizationFilter" style="max-width: 190px;">
+            <option value="">Organizations</option>
+            @foreach (var o in organizations)
+            {
+                <option value="@o.Id">@o.Name</option>
+            }
+        </InputSelect>
+
+        <InputSelect class="form-select" @bind-Value="contactFilter.GroupFilter" style="max-width: 190px;">
+            <option value="">Groups</option>
+            @foreach (var g in groups)
+            {
+                <option value="@g.TypeKey">@g.TypeValue</option>
+            }
+        </InputSelect>
+
+        <InputSelect class="form-select" @bind-Value="contactFilter.RelationshipFilter" style="max-width: 190px;">
+            <option value="">Relationships</option>
+            @foreach (var r in relationships)
+            {
+                <option value="@r.TypeKey">@r.TypeValue</option>
+            }
+        </InputSelect>
+
+        <button type="submit" class="btn btn-primary px-4">Apply Filter</button>
     </div>
+</EditForm>
 
-    <select class="form-select" style="max-width: 200px;">
-        <option>All</option>
-        <option>Editing</option>
-        <option>Finalized</option>
-    </select>
 
-    <input type="text" class="form-control" placeholder="Sales Order ID" style="max-width: 200px;">
 
-    <select class="form-select" style="max-width: 200px;">
-        <option>Status</option>
-        <option>Open</option>
-        <option>Closed</option>
-    </select>
+@code {
+    //Private fields
+    private List<Organization> organizations = new();
+    private List<Master> groups = new();
+    private List<Master> relationships = new();
 
-    <input type="date" class="form-control" style="max-width: 170px;">
+    [Parameter] 
+    public EventCallback<ContactFilter> OnFilterApplied { get; set; }
 
-    <button class="btn btn-primary px-4">Apply Filter</button>
+    //Filter model
+    private ContactFilter contactFilter = new();
 
-</div>
+    //Initialize
+    protected override async Task OnInitializedAsync()
+    {
+        organizations = await OrganizationService.GetAllAsync();
+        groups = await MasterService.GetByTypeNameAsync("Group");
+        relationships = await MasterService.GetByTypeNameAsync("Relationship");
+    }
+    
+    //Send filter back to parent component
+    private async Task ApplyFilterAsync()
+    {
+        await OnFilterApplied.InvokeAsync(contactFilter);
+    }
+}

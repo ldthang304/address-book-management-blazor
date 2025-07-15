@@ -29,6 +29,11 @@ namespace AddressBookManagement.Services.Implements
             return await _masterRepository.GetByIdAsync(id);
         }
 
+        public async Task<List<Master>> GetByTypeNameAsync(string typeName)
+        {
+            return await _masterRepository.FindAsync(m => m.TypeName!.Equals(typeName));
+        }
+
         public async Task RestoreAsync(int id)
         {
             await _masterRepository.RestoreAsync(id);

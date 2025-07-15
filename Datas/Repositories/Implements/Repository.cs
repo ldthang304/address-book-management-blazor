@@ -2,6 +2,8 @@
 using AddressBookManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Linq.Dynamic.Core;
+using AddressBookManagement.ViewModels;
 
 namespace AddressBookManagement.Datas.Repositories.Implements
 {
@@ -18,7 +20,8 @@ namespace AddressBookManagement.Datas.Repositories.Implements
             //Check if the class extends from Common class
             _isSoftDeletable = typeof(Common).IsAssignableFrom(typeof(T));
         }
-
+        
+        //Generate query command that check for delete flag
         private IQueryable<T> GetQueryable(bool includeDeleted = false)
         {
             IQueryable<T> query = _dbSet;
@@ -54,7 +57,7 @@ namespace AddressBookManagement.Datas.Repositories.Implements
             return await GetQueryable().FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
 
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        public async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
             return await GetQueryable().Where(predicate).ToListAsync();
         }
@@ -110,6 +113,42 @@ namespace AddressBookManagement.Datas.Repositories.Implements
         public IQueryable<T> Query(bool includeDeleted = false)
         {
             return GetQueryable(includeDeleted);
+        }
+
+        public async Task<PageResult<T>> GetPagedAsync(int pageIndex, int pageSize, string? sortBy = null, string? sortDirection = "ASC", List<Expression<Func<T, bool>>>? filters = null)
+        {
+            IQueryable<T> query = GetQueryable();
+
+            //Filter handling
+            if (filters != null)
+            {
+                foreach (var filter in filters)
+                {
+                    query = query.Where(filter);
+                }
+            }
+
+            var totalItems = await query.CountAsync();
+
+            //Sort By handling
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                query = query.OrderBy($"{sortBy} {sortDirection}");
+            }
+
+            //Paging handling
+            var items = await query
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PageResult<T>
+            {
+                Items = items,
+                TotalItems = totalItems,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
         }
     }
 }

@@ -18,3 +18,7 @@ INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('WebsiteType', 1, 'Fa
 INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('WebsiteType', 2, 'Instagram');
 INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('WebsiteType', 3, 'Linkedin');
 INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('WebsiteType', 4, 'Twitter');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('SortBy', 1, 'FirstName');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('SortBy', 2, 'LastName');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('SortDirection', 1, 'ASC');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('SortDirection', 2, 'DESC');

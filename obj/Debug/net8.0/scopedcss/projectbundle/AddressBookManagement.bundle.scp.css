@@ -35,26 +35,6 @@
             opacity: 0.5;
             pointer-events: none;
         }
-/* _content/AddressBookManagement/Shared/Components/TookBar.razor.rz.scp.css */
-.filter-bar[b-us5ix7fdtt] {
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
-}
-
-    .filter-bar a:hover[b-us5ix7fdtt] {
-        text-decoration: underline;
-    }
-
-    .filter-bar .btn-link[b-us5ix7fdtt] {
-        padding: 0;
-        font-weight: 500;
-    }
-
-        .filter-bar .btn-link:disabled[b-us5ix7fdtt] {
-            opacity: 0.5;
-            pointer-events: none;
-        }
 /* _content/AddressBookManagement/Shared/Layouts/MainLayout.razor.rz.scp.css */
 .page[b-fsdaahs8zv] {
     position: relative;

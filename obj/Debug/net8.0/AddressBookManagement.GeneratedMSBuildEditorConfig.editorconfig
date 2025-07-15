@@ -60,6 +60,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcV2VhdGhlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/ActivityPanel.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQWN0aXZpdHlQYW5lbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/ContactDetail.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ29udGFjdERldGFpbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/MoreInfoPanel.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcTW9yZUluZm9QYW5lbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/TookBar.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcVG9va0Jhci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -71,10 +87,6 @@ build_metadata.AdditionalFiles.CssScope = b-z59tb3ncyl
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/FilterBar.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcRmlsdGVyQmFyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-5j3glqc1fc
-
-[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/TookBar.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcVG9va0Jhci5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-us5ix7fdtt
 
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Layouts/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExheW91dHNcTWFpbkxheW91dC5yYXpvcg==
