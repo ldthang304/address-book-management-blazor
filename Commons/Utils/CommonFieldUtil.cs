@@ -4,7 +4,8 @@
     {
         public static int? GetActiveUserId()
         {
-            return 1;
+            //This is just a temp value
+            return 13;
         }
     }
 }

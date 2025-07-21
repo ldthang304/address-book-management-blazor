@@ -13,5 +13,9 @@
         {
             return dateTime.ToString(format);
         }
+        public static string FormatDateTime(DateTime dateTime)
+        {
+            return dateTime.ToString("ddd MMM d, h:mm tt");
+        }
     }
 }

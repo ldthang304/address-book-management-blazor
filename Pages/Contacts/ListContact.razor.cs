@@ -1,11 +1,11 @@
-﻿
-using AddressBookManagement.Models;
+﻿using AddressBookManagement.Models;
 using AddressBookManagement.Services;
 using AddressBookManagement.Services.Shared;
 using AddressBookManagement.ViewModels;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace AddressBookManagement.Pages.Contacts
 {
@@ -16,9 +16,10 @@ namespace AddressBookManagement.Pages.Contacts
         private List<Master> sortByOptions = new();
         private List<Master> sortDirections = new();
         private PageResult<Contact> pagedResult = new();
+        private ClaimsPrincipal? userContext;
 
         //Filters
-        private List<Expression<Func<Contact, bool>>>? filters;
+        private List<Expression<Func<Contact, bool>>>? filters = new();
 
         //Page fields
         private int pageIndex = 0;
@@ -26,7 +27,13 @@ namespace AddressBookManagement.Pages.Contacts
         private int totalPages = 0;
         private string? sortBy = "FirstName";
         private string sortDirection = "ASC";
-        
+        private int userId;
+
+        //Search fields
+        private string searchTerm = string.Empty;
+        private Timer? searchTimer;
+        private readonly int searchDelay = 300; // milliseconds delay for debouncing
+
         //Inject Services
         [Inject]
         private IContactService ContactService { get; set; } = null!;
@@ -36,18 +43,26 @@ namespace AddressBookManagement.Pages.Contacts
         private IMasterService MasterService { get; set; } = null!;
         [Inject]
         private NavigationManager NavigationManager { get; set; } = null!;
-        [Inject]
-        private ToastNavigationService ToastNavigationService { get; set; } = null!;
+
         [Inject]
         private FilterService FilterService { get; set; } = null!;
         [Inject]
         private ILogger<ListContact> Logger { get; set; } = default!;
+
         //On Initialize method
         protected override async Task OnInitializedAsync()
         {
+            //Get user in authen state
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            userContext = authState.User;
+            userId = int.Parse(userContext.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value); 
+
             //Get Masters
             sortByOptions = await MasterService.GetByTypeNameAsync("SortBy");
             sortDirections = await MasterService.GetByTypeNameAsync("SortDirection");
+
+            //Add initial filters: filter by user id
+            filters?.Add(c => c.AppUserId == userId);
 
             //Get Contact page result
             pagedResult = await ContactService.GetPagedAsync(pageIndex, pageSize, sortBy, sortDirection, filters);
@@ -57,17 +72,6 @@ namespace AddressBookManagement.Pages.Contacts
 
             //Start rendering component
             isInitialized = true;
-        }
-
-        //Show Toast message if it has message
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            var (message, level) = ToastNavigationService.ConsumeMessage();
-            if (!string.IsNullOrEmpty(message))
-            {
-                await Task.Delay(100);
-                ToastService.ShowToast(level, message);
-            }
         }
 
         //Handle Card Click
@@ -98,7 +102,6 @@ namespace AddressBookManagement.Pages.Contacts
             }
         }
 
-
         //Next and Previous Page handle
         private async Task NextPage() => await GoToPageAsync(pageIndex + 1);
         private async Task PrevPage() => await GoToPageAsync(pageIndex - 1);
@@ -120,12 +123,86 @@ namespace AddressBookManagement.Pages.Contacts
             pagedResult = await ContactService.GetPagedAsync(pageIndex, pageSize, sortBy, sortDirection, filters);
             StateHasChanged();
         }
+
         private async Task ApplySortDirection(ChangeEventArgs e)
         {
             Master? masterSortDirection = sortDirections.FirstOrDefault(m => m.TypeKey == int.Parse(e.Value.ToString()));
             sortDirection = masterSortDirection?.TypeValue;
             pagedResult = await ContactService.GetPagedAsync(pageIndex, pageSize, sortBy, sortDirection, filters);
             StateHasChanged();
+        }
+
+        //Real-time Search Methods
+        private void OnSearchInput(ChangeEventArgs e)
+        {
+            searchTerm = e.Value?.ToString() ?? string.Empty;
+
+            // Dispose existing timer
+            searchTimer?.Dispose();
+
+            // Create new timer with debounce delay
+            searchTimer = new Timer(async _ => await PerformSearch(), null, searchDelay, Timeout.Infinite);
+        }
+
+        private async Task PerformSearch()
+        {
+            await InvokeAsync(async () =>
+            {
+                try
+                {
+                    // Build search filters
+                    var searchFilters = FilterService.BuildSearchFilters(searchTerm);
+
+                    // Combine with existing filters
+                    var combinedFilters = new List<Expression<Func<Contact, bool>>>();
+                    if (filters != null && filters.Any())
+                        combinedFilters.AddRange(filters);
+
+                    // Add search filter if exists
+                    if (searchFilters != null && searchFilters.Any())
+                    {
+                        // If you need OR logic for search terms, you might need to modify this
+                        // For now, this adds each search filter separately (AND logic)
+                        combinedFilters.AddRange(searchFilters);
+                    }
+
+                    // Reset to first page when searching
+                    pageIndex = 0;
+
+                    // Get filtered results
+                    pagedResult = await ContactService.GetPagedAsync(
+                        pageIndex,
+                        pageSize,
+                        sortBy,
+                        sortDirection,
+                        combinedFilters.Any() ? combinedFilters : null);
+
+                    // Update pagination
+                    totalPages = (int)Math.Ceiling((double)pagedResult.TotalItems / pageSize);
+
+                    StateHasChanged();
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, "Error performing search for term: {SearchTerm}", searchTerm);
+                    ToastService.ShowError("An error occurred while searching contacts.");
+                }
+            });
+        }
+
+        private void ClearSearch()
+        {
+            searchTerm = string.Empty;
+            searchTimer?.Dispose();
+
+            // Trigger search with empty term to reset results
+            _ = Task.Run(async () => await PerformSearch());
+        }
+
+        // Dispose timer when component is disposed
+        public void Dispose()
+        {
+            searchTimer?.Dispose();
         }
     }
 }

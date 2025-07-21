@@ -1,9 +1,11 @@
-﻿using AddressBookManagement.Models;
+﻿using address_book_backend.Commons.Utils;
+using AddressBookManagement.Models;
 using AddressBookManagement.Services;
 using AddressBookManagement.Services.Shared;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Threading.Tasks;
 
 namespace AddressBookManagement.Shared.Components
 {
@@ -13,8 +15,14 @@ namespace AddressBookManagement.Shared.Components
         private List<TodoTask> taskItems = new();
         private List<TodoTask> completedTasks = new();
         private List<Master> masterTaskTypes = new();
+        private List<Note> notes = new();
         private TodoTask NewTask = new();
-       
+        private Note NewNote = new();
+
+        //Store reminded task
+        private HashSet<int> remindedTaskIds = new();
+
+
         //Get contact id from parent component
         [Parameter]
         public Contact Contact { get; set; } = null!;
@@ -31,13 +39,12 @@ namespace AddressBookManagement.Shared.Components
         [Inject]
         private IToastService ToastService { get; set; } = default!;
         
-        //Toast message services
         [Inject]
-        private ToastNavigationService ToastNavigationService { get; set; } = null!;
-
+        private INoteService NoteService { get; set; } = default!;
         //Task reminder
         [Inject]
         private ReminderWatcher ReminderWatcher { get; set; } = default!;
+        
 
         protected override async Task OnInitializedAsync()
         {
@@ -45,6 +52,7 @@ namespace AddressBookManagement.Shared.Components
             ResetNewTask();
             masterTaskTypes = await MasterService.GetByTypeNameAsync("TaskType");
             var allTasks = await TodoTaskService.GetByContactIdAsync(Contact.Id);
+            notes = await NoteService.GetByContactIdAsync(Contact.Id);
 
             taskItems = allTasks.Where(t => !t.IsCompleted).ToList();
             completedTasks = allTasks.Where(t => t.IsCompleted).ToList();
@@ -71,32 +79,48 @@ namespace AddressBookManagement.Shared.Components
             StateHasChanged();
         }
 
-        private async Task HandleValidSubmit()
+        private async Task HandleSubmitTask()
         {
-            //Add new tasks to database
-            await TodoTaskService.AddAsync(NewTask);
+            Logger.LogInformation("This is called");
+            // Add new task
+            if (NewTask.Id == 0)
+            {
+                await TodoTaskService.AddAsync(NewTask);
+            }
+            else
+            {
+                await TodoTaskService.UpdateAsync(NewTask);
+            }
+            // Get all task after update
+            var allTasks = await TodoTaskService.GetByContactIdAsync(Contact.Id);
 
-            // ⬇ Refresh the list first (to update UI)
-            taskItems = await TodoTaskService.GetByContactIdAsync(Contact.Id);
+            // Rerender taskItems and completedTask
+            taskItems = allTasks.Where(t => !t.IsCompleted).ToList();
+            completedTasks = allTasks.Where(t => t.IsCompleted).ToList();
 
-            //Hide the modal
+            // Hide modal
             var modalInstance = await JS.InvokeAsync<IJSObjectReference>(
                 "bootstrap.Modal.getOrCreateInstance", "#taskModal");
             await modalInstance.InvokeVoidAsync("hide");
 
-            //Reset the form
+            // Reset form
             ResetNewTask();
-            StateHasChanged();
         }
+
 
         //Handle task reminder 
         private void HandleReminderTriggered(List<TodoTask> tasks)
         {
             foreach (var task in tasks)
             {
-                ToastNavigationService.SetMessage($"{task.Title} will due at {task.DueDate?.ToShortTimeString()}", ToastLevel.Error);
+                ToastService.ShowWarning($"{task.Title} will due at {task.DueDate?.ToShortTimeString()}");
             }
+            // Lưu danh sách ID vào biến
+            remindedTaskIds = tasks.Select(t => t.Id).ToHashSet();
+            // Render lại UI
+            InvokeAsync(StateHasChanged);
         }
+
         //Destroy reminder after component is destroyed
         public void Dispose()
         {
@@ -107,9 +131,124 @@ namespace AddressBookManagement.Shared.Components
         {
             NewTask = new TodoTask
             {
-                ContactId = Contact.Id
+                ContactId = Contact.Id,
+                DueDate = DateTime.Now,
             };
         }
+        private string GetBorderClass(TodoTask task)
+        {
+            var now = DateTime.Now;
+
+            if (task.DueDate < now)
+            {
+                return "border-danger"; // Đã quá hạn
+            }
+
+            if (remindedTaskIds.Contains(task.Id))
+            {
+                return "border-warning"; // Được nhắc hẹn (sắp đến hạn)
+            }
+
+            return "border-primary"; // Bình thường
+        }
+
+
+        private async Task ShowEditTaskModal(TodoTask task)
+        {
+            NewTask = await TodoTaskService.GetByIdAsync(task.Id);
+            //Reset state after getting new task
+            StateHasChanged();
+            // show modal
+            var modalInstance = await JS.InvokeAsync<IJSObjectReference>(
+                "bootstrap.Modal.getOrCreateInstance", "#taskModal");
+            await modalInstance.InvokeVoidAsync("show");
+        }
+        private async Task ShowAddModal()
+        {
+            // Reset form
+            ResetNewTask();
+
+            //Reset state
+            StateHasChanged();
+
+            // Show modal
+            var modalInstance = await JS.InvokeAsync<IJSObjectReference>(
+                "bootstrap.Modal.getOrCreateInstance", "#taskModal");
+            await modalInstance.InvokeVoidAsync("show");
+        }
+
+        //Delete Task
+        public async Task DeleteTask(TodoTask todoTask)
+        {
+            await TodoTaskService.DeleteAsync(todoTask.Id);
+            // Get all task after update
+            var allTasks = await TodoTaskService.GetByContactIdAsync(Contact.Id);
+
+            // Rerender taskItems and completedTask
+            taskItems = allTasks.Where(t => !t.IsCompleted).ToList();
+            completedTasks = allTasks.Where(t => t.IsCompleted).ToList();
+        }
         
+        private async Task ShowNoteModal()
+        {
+            ResetNewNote();
+            //Reset state
+            StateHasChanged();
+
+            // Show modal
+            var modalInstance = await JS.InvokeAsync<IJSObjectReference>(
+                "bootstrap.Modal.getOrCreateInstance", "#noteModal");
+            await modalInstance.InvokeVoidAsync("show");
+        }
+
+        //Reset Note
+        private void ResetNewNote()
+        {
+            NewNote = new Note
+            {
+                ContactId = Contact.Id,
+                CreatedAt = DateTime.Now,
+                CreatedBy = CommonFieldUtil.GetActiveUserId()
+            };
+        }
+        private async Task HandleSubmitNote()
+        {
+            // Add new task
+            if (NewNote.Id == 0)
+            {
+                await NoteService.AddAsync(NewNote);
+            }
+            else
+            {
+                await NoteService.UpdateAsync(NewNote);
+            }
+            // Get all task after update
+            notes = await NoteService.GetByContactIdAsync(Contact.Id);
+
+            // Hide modal
+            var modalInstance = await JS.InvokeAsync<IJSObjectReference>(
+                "bootstrap.Modal.getOrCreateInstance", "#noteModal");
+            await modalInstance.InvokeVoidAsync("hide");
+
+            // Reset form
+            ResetNewNote();
+        }
+        private async Task ShowEditNoteModal(Note note)
+        {
+            NewNote = await NoteService.GetByIdAsync(note.Id);
+            //Reset state after getting new task
+            StateHasChanged();
+            // show modal
+            var modalInstance = await JS.InvokeAsync<IJSObjectReference>(
+                "bootstrap.Modal.getOrCreateInstance", "#noteModal");
+            await modalInstance.InvokeVoidAsync("show");
+        }
+
+        public async Task DeleteNote(Note note)
+        {
+            await NoteService.DeleteAsync(note.Id);
+            notes = await NoteService.GetByContactIdAsync(Contact.Id);
+            StateHasChanged();
+        }
     }
 }

@@ -8,6 +8,9 @@ namespace AddressBookManagement.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Phone number is required", AllowEmptyStrings = false)]
+        [Phone(ErrorMessage = "Invalid phone number format")]
+        [StringLength(20, ErrorMessage = "Phone number cannot exceed 20 characters")]
         public string? Number { get; set; }
 
         //Navigation properties

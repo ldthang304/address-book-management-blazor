@@ -28,6 +28,12 @@ namespace AddressBookManagement.Services.Implements
         {
             await _contactRepository.DeleteAsync(id);
         }
+
+        public async Task<List<Contact>> FindAsync(int id)
+        {
+            return await _contactRepository.FindAsync(c => c.AppUserId == id);
+        }
+
         public async Task<List<Contact>> GetAllAsync()
         {
             return await _contactRepository.GetAllAsync();

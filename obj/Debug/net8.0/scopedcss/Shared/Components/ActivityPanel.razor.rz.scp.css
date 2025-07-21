@@ -1,0 +1,13 @@
+
+
+.task-hover:hover[b-01zpsgmheq] {
+    background-color: lightblue; /* light gray */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.task-hover:hover .delete-icon[b-01zpsgmheq] {
+    display: inline-block !important;
+}

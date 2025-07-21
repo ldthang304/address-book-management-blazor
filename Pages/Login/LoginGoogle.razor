@@ -1,0 +1,19 @@
+﻿@page "/login-google"
+
+<h3>Login</h3>
+
+@code {
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authProperties = new AuthenticationProperties
+            {
+                RedirectUri = "/after-login"
+            };
+        var result = TypedResults.Challenge(authProperties,
+            [GoogleDefaults.AuthenticationScheme]);
+        await result.ExecuteAsync(HttpContext!);
+    }
+}

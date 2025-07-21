@@ -12,6 +12,7 @@ namespace AddressBookManagement.Datas
         public DbSet<Phone> Phones { get; set; }
         public DbSet<TodoTask> Tasks { get; set; }
         public DbSet<Website> Websites { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             
@@ -19,6 +20,13 @@ namespace AddressBookManagement.Datas
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            //One AppUser has many Contacts
+            modelBuilder.Entity<Contact>()
+                .HasOne(c => c.AppUser)
+                .WithMany(a => a.Contacts)
+                .HasForeignKey(c => c.AppUserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             //One Contact has many Phones
             modelBuilder.Entity<Phone>()

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AddressBookManagement.Models
 {
     [Table("Notes")]
-    public class Note
+    public class Note : Common
     {
         [Key]
         public int Id { get; set; }

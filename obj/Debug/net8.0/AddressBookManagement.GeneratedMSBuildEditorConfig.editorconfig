@@ -1,11 +1,19 @@
 is_global = true
 build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = AddressBookManagement
 build_property.RootNamespace = AddressBookManagement
@@ -40,10 +48,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGFjdHNcTGlzdENvbnRhY3QucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -52,20 +56,40 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Login/AccessDenied.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5cQWNjZXNzRGVuaWVkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Login/AfterLogin.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5cQWZ0ZXJMb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Login/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5cTG9naW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Login/LoginGoogle.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5cTG9naW5Hb29nbGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Login/Logout.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW5cTG9nb3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm91dGVzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcV2VhdGhlci5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/ActivityPanel.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQWN0aXZpdHlQYW5lbC5yYXpvcg==
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Test.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVzdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/ContactDetail.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ29udGFjdERldGFpbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/LoginComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcTG9naW5Db21wb25lbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/MoreInfoPanel.razor]
@@ -76,9 +100,17 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcVG9va0Jhci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Layouts/LoginLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExheW91dHNcTG9naW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/ActivityPanel.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQWN0aXZpdHlQYW5lbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-01zpsgmheq
 
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/ContactCard.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcQ29udGFjdENhcmQucmF6b3I=
@@ -87,6 +119,10 @@ build_metadata.AdditionalFiles.CssScope = b-z59tb3ncyl
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/FilterBar.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcRmlsdGVyQmFyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-5j3glqc1fc
+
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Components/NotAuthorized.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXENvbXBvbmVudHNcTm90QXV0aG9yaXplZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-a3suprowy8
 
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Shared/Layouts/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExheW91dHNcTWFpbkxheW91dC5yYXpvcg==

@@ -29,7 +29,7 @@
             <div class="tab-pane fade show active" id="tasks" role="tabpanel">
                 <!-- Add Task Button -->
                 <div class="d-flex justify-content-end mb-3">
-                    <button class="btn btn-info text-white btn-sm" data-bs-toggle="modal" data-bs-target="#taskModal"><i class="bi bi-plus-circle me-1"></i> Add Tasks</button>
+                    <button class="btn btn-info text-white btn-sm" @onclick="ShowAddModal"><i class="bi bi-plus-circle me-1"></i> Add Tasks</button>
                 </div>
 
                 <!-- ✅ Task Items -->
@@ -38,16 +38,25 @@
                         <span class="fw-semibold text-muted">Task Items</span>
                         <i class="bi bi-chevron-down text-muted task-toggle" style="font-size: 14px; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#taskItemsContent"></i>
                     </div>
+                    <hr class="my-3" />
 
                     <div id="taskItemsContent" class="collapse show">
                         <div class="d-flex flex-column gap-3">
                             @foreach (var task in taskItems)
                             {
-                                <div class="d-flex align-items-start border-start border-4 border-warning ps-3">
+                                <div class="d-flex align-items-start border-start border-4 border-warning ps-3 p-1 task-hover" @onclick="() => ShowEditTaskModal(task)">
                                     <input type="checkbox"
                                            class="form-check-input me-2 mt-1"
                                            checked="@task.IsCompleted"
-                                           @onchange="e => ToggleTaskCompletionAsync(task, (bool)(e.Value ?? false))" />
+                                           @onchange="e => ToggleTaskCompletionAsync(task, (bool)(e.Value ?? false))"
+                                           @onclick:stopPropagation />
+
+                                    <button class="delete-icon position-absolute top-0 end-0 me-2 d-none"
+                                            title="Edit Task"
+                                            @onclick="() => DeleteTask(task)"
+                                            @onclick:stopPropagation>
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                     <div>
                                         <div class="fw-medium">@task.Title <i class="bi bi-bell ms-1 text-muted"></i></div>
                                         <div class="text-muted small">@task.DueDate?.ToString("MMM dd, yyyy hh:mm tt")</div>
@@ -64,16 +73,25 @@
                         <span class="fw-semibold text-muted">Completed Tasks</span>
                         <i class="bi bi-chevron-down text-muted completed-toggle" style="font-size: 14px; cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#completedTasksContent"></i>
                     </div>
+                    <hr class="my-3" />
 
                     <div id="completedTasksContent" class="collapse show">
                         <div class="d-flex flex-column gap-3">
                             @foreach (var task in completedTasks)
                             {
-                                <div class="d-flex align-items-start border-start border-4 border-success ps-3">
+                                <div class="d-flex align-items-start border-start border-4 border-success ps-3 p-1 task-hover" @onclick="() => ShowEditTaskModal(task)">
                                     <input type="checkbox"
                                            class="form-check-input me-2 mt-1"
                                            checked="@task.IsCompleted"
-                                           @onchange="e => ToggleTaskCompletionAsync(task, false)" />
+                                           @onchange="e => ToggleTaskCompletionAsync(task, false)"
+                                           @onclick:stopPropagation />
+
+                                    <button class="delete-icon position-absolute top-0 end-0 me-2 d-none"
+                                            title="Edit Task"
+                                            @onclick="() => DeleteTask(task)"
+                                            @onclick:stopPropagation>
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                     <div>
                                         <div class="fw-medium text-decoration-line-through">@task.Title <i class="bi bi-check-circle ms-1 text-muted"></i></div>
                                         <div class="text-muted small">@task.DueDate?.ToString("MMM dd, yyyy hh:mm tt")</div>
@@ -88,48 +106,50 @@
             <!--Note tab-->
             <div class="tab-pane fade" id="notes" role="tabpanel">
                 <div class="d-flex justify-content-end mb-3">
-                    <button class="btn btn-info text-white btn-sm" data-bs-toggle="modal" data-bs-target="#noteModal">
+                    <button class="btn btn-info text-white btn-sm" @onclick="ShowNoteModal">
                         Add Note
                     </button>
                 </div>
+                @foreach(var note in notes)
+                {
+                    <div class="position-relative border-start border-2 ps-3 p-1 task-hover" @onclick="() => ShowEditNoteModal(note)">
+                        <h6 class="fw-semibold text-secondary">@note.Title</h6>
+                        <small class="text-muted">@note.CreatedAt?.ToString("ddd MMM d, h:mm tt") by <span class="text-info">@note.CreatedBy</span></small>
 
-
-                <div class="position-relative border-start border-2 ps-3">
-                    <h6 class="fw-semibold text-secondary">Nothing</h6>
-                    <small class="text-muted">Sat Jun 7, 9:06 PM by <span class="text-info">you</span></small>
-
-                    <!-- Edit Icon -->
-                    <i class="bi bi-pencil-fill position-absolute top-0 end-0 text-info me-2" style="cursor: pointer;"></i>
-                </div>
+                        <!-- Edit Icon -->
+                        <button @onclick:stopPropagation @onclick="() => DeleteNote(note)"><i class="bi bi-trash-fill position-absolute top-0 end-0 text-info me-2" style="cursor: pointer;"></i></button>
+                    </div>
+                }
             </div>
 
             <!--Note Modal-->
             <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 rounded shadow">
-
+                        <EditForm Model="@NewNote" OnValidSubmit="HandleSubmitNote">
                         <div class="modal-body">
                             <input type="text" class="form-control form-control-lg border-0 fw-bold text-muted mb-2"
-                                   placeholder="Title" style="font-size: 1.25rem;">
+                                   placeholder="Title" style="font-size: 1.25rem;" @bind-value="@NewNote.Title">
                             <hr class="mt-0">
                             <textarea class="form-control border-0 shadow-none text-muted flex-grow-1" placeholder="Add a note"
-                                      style="resize: none;"></textarea>
+                                      style="resize: none;" @bind="@NewNote.Content" @bind:event="oninput"></textarea>
                         </div>
 
                         <div class="modal-footer border-0 d-flex justify-content-between">
                             <button type="button" class="btn btn-link text-info" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-info text-white px-4">Save</button>
+                            <button type="submit" class="btn btn-info text-white px-4">Save</button>
                         </div>
-
+                        </EditForm>
                     </div>
                 </div>
             </div>
 
             <!-- Task Modal -->
-            <EditForm Model="@NewTask" OnValidSubmit="HandleValidSubmit">
+            
                 <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content border-0 rounded shadow">
+                            <EditForm Model="@NewTask" OnValidSubmit="HandleSubmitTask">
                             <div class="modal-body">
 
                                 <!-- Title input -->
@@ -177,12 +197,12 @@
 
                             <div class="modal-footer border-0 d-flex justify-content-between">
                                 <button type="button" class="btn btn-link text-info" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-info text-white px-4">Add</button>
+                                <button type="submit" class="btn btn-info text-white px-4">Save</button>
                             </div>
+                            </EditForm>
                         </div>
                     </div>
                 </div>
-            </EditForm>
         </div>
     </div>
 </div>

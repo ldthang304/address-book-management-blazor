@@ -55,3 +55,22 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+/* Target input elements with validation classes */
+.form-control.modified.valid {
+    border-color: #28a745;
+}
+.form-control.invalid {
+    border-color: red;
+}
+.form-control.modified.invalid {
+    border-color: #dc3545;
+}
+
+/* Optional: Add focus states */
+.form-control.valid:focus {
+    border-color: deepskyblue;
+}
+
+.form-control.invalid:focus {
+    border-color: #dc3545;
+}

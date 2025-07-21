@@ -1,0 +1,57 @@
+﻿@page "/after-login"
+
+@inject IAppUserService AppUserService
+@inject NavigationManager NavigationManager
+<h3>AfterLogin</h3>
+
+@code {
+
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!HttpContext.User.Identity!.IsAuthenticated)
+        {
+            return;
+        }
+        var name = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)!.Value;
+        var email = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)!.Value;
+
+        var getUser = await AppUserService.GetByEmail(email);
+        if (getUser == null)
+        {
+            var users = await AppUserService.GetAllAsync();
+            int count = users != null ? users.Count() : 0;
+            var user = new AppUser
+                {
+                    Name = name,
+                    Email = email
+                };
+            if (count == 0)
+            {
+                user.Role = "Admin";
+            }
+            else
+            {
+                user.Role = "User";
+                user.CreatedAt = DateTime.Now;
+                user.UpdatedAt = DateTime.Now;
+                user.RecordVersion = RecordVersion.Initial;
+            }
+            await AppUserService.AddAsync(user);
+
+        }
+        var _user = await AppUserService.GetByEmail(email);
+        Claim[] claims = [
+            new Claim(ClaimTypes.NameIdentifier, _user.Id.ToString()),
+                new Claim(ClaimTypes.GivenName, _user.Name),
+                new Claim(ClaimTypes.Email, _user.Email),
+                new Claim(ClaimTypes.Role, _user.Role)
+        ];
+        var identity = new ClaimsIdentity(claims, AppConstants.AuthScheme);
+        var prin = new ClaimsPrincipal(identity);
+        await HttpContext.SignInAsync(AppConstants.AuthScheme, prin);
+        NavigationManager.NavigateTo("/");
+    }
+}
