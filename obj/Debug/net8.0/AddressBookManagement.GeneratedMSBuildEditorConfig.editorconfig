@@ -44,6 +44,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGFjdHNcRGV0YWlsQ29udGFjdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Contacts/FavouriteContact.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGFjdHNcRmF2b3VyaXRlQ29udGFjdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Workspace/PRN222_Project/AddressBookManagement/AddressBookManagement/Pages/Contacts/ListContact.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29udGFjdHNcTGlzdENvbnRhY3QucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

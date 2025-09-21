@@ -12,6 +12,7 @@
         public const string EmailServer = "smtp.gmail.com";
         public const int EmailPort = 587;
         public const string AppEmailPassword = "eowm zmdt kolg fpqf";
+        public const string AppDefaultEmail = "thangldhe186175@fpt.edu.vn";
         //dakf aqga rvbw wbbt
     }
 }

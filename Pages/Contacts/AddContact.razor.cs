@@ -69,6 +69,7 @@ namespace AddressBookManagement.Pages.Contacts
             if (ContactId.HasValue)
             {
                 contact = await ContactService.GetByIdAsync(ContactId.Value);
+                contact.UpdatedAt = DateTime.UtcNow;
                 // Set the preview URL for existing image
                 if (!string.IsNullOrEmpty(contact.Image))
                 {
@@ -78,6 +79,7 @@ namespace AddressBookManagement.Pages.Contacts
             else
             {
                 contact.AppUserId = userId;
+                contact.CreatedAt = DateTime.UtcNow;
             }
             editContext = new EditContext(contact!);
             //Finish initializing

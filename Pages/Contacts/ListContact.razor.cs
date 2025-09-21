@@ -25,8 +25,8 @@ namespace AddressBookManagement.Pages.Contacts
         private int pageIndex = 0;
         private int pageSize = 4;
         private int totalPages = 0;
-        private string? sortBy = "FirstName";
-        private string sortDirection = "ASC";
+        private string? sortBy = "CreatedAt";
+        private string sortDirection = "DESC";
         private int userId;
 
         //Search fields

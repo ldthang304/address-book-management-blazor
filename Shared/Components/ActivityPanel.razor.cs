@@ -1,11 +1,12 @@
 ﻿using address_book_backend.Commons.Utils;
+using AddressBookManagement.Commons.Constants;
 using AddressBookManagement.Models;
 using AddressBookManagement.Services;
-using AddressBookManagement.Services.Shared;
 using Blazored.Toast.Services;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Threading.Tasks;
+using MimeKit;
 
 namespace AddressBookManagement.Shared.Components
 {
@@ -114,11 +115,46 @@ namespace AddressBookManagement.Shared.Components
             foreach (var task in tasks)
             {
                 ToastService.ShowWarning($"{task.Title} will due at {task.DueDate?.ToShortTimeString()}");
+                //SendEmail(task);
             }
             // Lưu danh sách ID vào biến
             remindedTaskIds = tasks.Select(t => t.Id).ToHashSet();
             // Render lại UI
             InvokeAsync(StateHasChanged);
+        }
+
+        private async Task SendEmail(TodoTask task)
+        {
+            try
+            {
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse(AppConstants.AppDefaultEmail));
+                email.To.Add(MailboxAddress.Parse(Contact.PersonalEmail));
+                email.Subject = "Task is Dueing";
+                email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                {
+                    Text = "test email"
+                };
+
+                using var smtp = new SmtpClient();
+
+                // TODO: Configure your actual SMTP settings
+                // You'll need to replace these with your actual SMTP server configuration
+                await smtp.ConnectAsync(AppConstants.EmailServer, 587, MailKit.Security.SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(AppConstants.AppDefaultEmail, AppConstants.AppEmailPassword);
+                await smtp.SendAsync(email);
+                await smtp.DisconnectAsync(true);
+            }
+            catch (Exception ex)
+            {
+                // Show error toast
+                // toastService.ShowError($"Failed to send email: {ex.Message}");
+                Console.WriteLine($"Email send error: {ex.Message}");
+            }
+            finally
+            {
+                StateHasChanged();
+            }
         }
 
         //Destroy reminder after component is destroyed
@@ -135,22 +171,7 @@ namespace AddressBookManagement.Shared.Components
                 DueDate = DateTime.Now,
             };
         }
-        private string GetBorderClass(TodoTask task)
-        {
-            var now = DateTime.Now;
-
-            if (task.DueDate < now)
-            {
-                return "border-danger"; // Đã quá hạn
-            }
-
-            if (remindedTaskIds.Contains(task.Id))
-            {
-                return "border-warning"; // Được nhắc hẹn (sắp đến hạn)
-            }
-
-            return "border-primary"; // Bình thường
-        }
+        
 
 
         private async Task ShowEditTaskModal(TodoTask task)
