@@ -1,0 +1,19 @@
+.filter-bar[b-5j3glqc1fc] {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+    .filter-bar a:hover[b-5j3glqc1fc] {
+        text-decoration: underline;
+    }
+
+    .filter-bar .btn-link[b-5j3glqc1fc] {
+        padding: 0;
+        font-weight: 500;
+    }
+
+        .filter-bar .btn-link:disabled[b-5j3glqc1fc] {
+            opacity: 0.5;
+            pointer-events: none;
+        }

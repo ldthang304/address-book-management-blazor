@@ -1,0 +1,394 @@
+﻿@page "/contacts/add/{contactId:int?}"
+@rendermode InteractiveServer
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@if (!isInitialized)
+{
+    <div class="d-flex justify-content-center mt-3">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else
+{
+    <AuthorizeView>
+        <Authorized>
+            <EditForm Model="contact" OnValidSubmit="SaveAsync" Context="contactContext">
+                <DataAnnotationsValidator />
+                <div class="container mt-5">
+                    <!-- Header (with Improved Image Binding) -->
+                    <div class="d-flex align-items-center mb-4">
+                        <!-- Image Container with Better Styling -->
+                        <div class="position-relative me-3">
+                            <div class="rounded-circle overflow-hidden bg-light border shadow-sm position-relative"
+                                 style="width: 80px; height: 80px;">
+                                @if (isImageUploading)
+                                {
+                                    <div class="d-flex justify-content-center align-items-center w-100 h-100 bg-light">
+                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                            <span class="visually-hidden">Uploading...</span>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @if (!string.IsNullOrEmpty(imagePreviewUrl) || !string.IsNullOrEmpty(contact?.Image))
+                                    {
+                                        <img src="@(imagePreviewUrl ?? contact.Image)"
+                                             alt="Contact Photo"
+                                             class="w-100 h-100 object-fit-cover"
+                                             style="transition: all 0.3s ease;" />
+                                    }
+                                    else
+                                    {
+                                        <!-- Default User Avatar -->
+                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient"
+                                             style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                            <i class="bi bi-person-fill text-white" style="font-size: 2rem;"></i>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Image Upload Controls - Positioned as Overlay -->
+                            <div class="position-absolute" style="bottom: -8px; right: -8px;">
+                                <div class="btn-group-vertical">
+                                    <!-- Upload Image Button with Improved Styling -->
+                                    <label class="btn btn-primary rounded-circle shadow-sm d-flex align-items-center justify-content-center @(isImageUploading ? "disabled" : "")"
+                                           style="width: 36px; height: 36px; cursor: pointer; transition: all 0.2s ease;"
+                                           title="Upload Photo"
+                                           onmouseover="this.style.transform='scale(1.1)'"
+                                           onmouseout="this.style.transform='scale(1)'">
+                                        <i class="bi bi-camera-fill" style="font-size: 14px;"></i>
+
+                                        <!-- File Input (hidden) -->
+                                        <InputFile OnChange="OnImageSelected"
+                                                   class="d-none"
+                                                   accept="image/*"
+                                                   disabled="@isImageUploading" />
+                                    </label>
+
+                                    <!-- Remove Image Button (if image is selected) -->
+                                    @if (!string.IsNullOrEmpty(imagePreviewUrl) || !string.IsNullOrEmpty(contact?.Image))
+                                    {
+                                        <button type="button"
+                                                class="btn btn-danger rounded-circle shadow-sm d-flex align-items-center justify-content-center mt-1 @(isImageUploading ? "disabled" : "")"
+                                                style="width: 28px; height: 28px; transition: all 0.2s ease;"
+                                                @onclick="RemoveImage"
+                                                disabled="@isImageUploading"
+                                                title="Remove Photo"
+                                                onmouseover="this.style.transform='scale(1.1)'"
+                                                onmouseout="this.style.transform='scale(1)'">
+                                            <i class="bi bi-trash-fill" style="font-size: 12px;"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Name with Better Typography -->
+                        <div class="flex-grow-1">
+                            <h2 class="mb-1 text-dark fw-bold">
+                                @if (!string.IsNullOrEmpty(contact?.FirstName) || !string.IsNullOrEmpty(contact?.LastName))
+                                {
+                                    @($"{contact?.FirstName} {contact?.LastName}".Trim())
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">New Contact</span>
+                                }
+                            </h2>
+                            @if (!string.IsNullOrEmpty(contact?.NickName))
+                            {
+                                <p class="text-muted mb-0 small">
+                                    <i class="bi bi-quote me-1"></i>@contact.NickName
+                                </p>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Alternative Drag & Drop Image Upload Section (Optional Enhancement) -->
+                    <div class="card border-0 bg-light rounded-3 p-4 mb-4" style="display: none;" id="dragDropSection">
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <i class="bi bi-cloud-upload text-primary" style="font-size: 2.5rem;"></i>
+                            </div>
+                            <h6 class="mb-2">Upload Contact Photo</h6>
+                            <p class="text-muted small mb-3">
+                                Drag and drop an image here, or click to browse
+                            </p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <label class="btn btn-primary btn-sm">
+                                    <i class="bi bi-upload me-1"></i>Choose File
+                                    <InputFile OnChange="OnImageSelected" class="d-none" accept="image/*" />
+                                </label>
+                                @if (!string.IsNullOrEmpty(contact?.Image))
+                                {
+                                    <button type="button" class="btn btn-outline-danger btn-sm" @onclick="RemoveImage">
+                                        <i class="bi bi-trash me-1"></i>Remove
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info Section -->
+                    <h5 class="mb-3">Contact Info</h5>
+
+                    <!-- Hidden input for image -->
+                    <input type="hidden" @bind="contact?.Image" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText class="form-control"
+                                           id="firstName" @bind-Value="contact.FirstName" placeholder="First name" />
+                                <label for="firstName">First name <span class="text-danger">*</span></label>
+                                <ValidationMessage For="@(() => contact.FirstName)" class="text-danger small" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText class="form-control"
+                                           id="lastName" @bind-Value="contact.LastName" placeholder="Last name" />
+                                <label for="lastName">Last name <span class="text-danger">*</span></label>
+                                <ValidationMessage For="@(() => contact.LastName)" class="text-danger small" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText class="form-control"
+                                           id="nickName" @bind-Value="contact.NickName" placeholder="Nick name" />
+                                <label for="nickName">Nick name <span class="text-danger">*</span></label>
+                                <ValidationMessage For="@(() => contact.NickName)" class="text-danger small" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText class="form-control"
+                                           id="jobTitle" @bind-Value="contact.JobTitle" placeholder="Job Title" />
+                                <label for="jobTitle">Job Title</label>
+                                <ValidationMessage For="@(() => contact.JobTitle)" class="text-danger small" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="organization" @bind="contact.OrganizationId">
+                                    <option disabled>Select organization</option>
+                                    @foreach (var o in organizations)
+                                    {
+                                        <option value="@o.Id">@o.Name</option>
+                                    }
+                                </select>
+                                <label for="organization">Organization</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="department" @bind="contact.Department">
+                                    <option disabled>Select Department</option>
+                                    @foreach (var d in MasterMap!["Department"])
+                                    {
+                                        <option value="@d.TypeKey">@d.TypeValue</option>
+                                    }
+                                </select>
+                                <label for="department">Department</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText class="form-control"
+                                           id="personalEmail" @bind-Value="contact.PersonalEmail" placeholder="Personal Email" />
+                                <label for="personalEmail">Personal Email</label>
+                                <ValidationMessage For="@(() => contact.PersonalEmail)" class="text-danger small" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText class="form-control"
+                                           id="workEmail" @bind-Value="contact.WorkEmail" placeholder="Work Email" />
+                                <label for="workEmail">Work Email</label>
+                                <ValidationMessage For="@(() => contact.WorkEmail)" class="text-danger small" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputDate class="form-control"
+                                           id="birthday" @bind-Value="contact.BirthDay" />
+                                <label for="birthday">Birthday</label>
+                                <ValidationMessage For="@(() => contact.BirthDay)" class="text-danger small" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="gender" @bind="contact.Gender">
+                                    <option disabled>Select gender</option>
+                                    @foreach (var g in MasterMap["Gender"])
+                                    {
+                                        <option value="@g.TypeKey">@g.TypeValue</option>
+                                    }
+                                </select>
+                                <label for="gender">Gender</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="group" @bind="contact.Group">
+                                    <option disabled>Select group</option>
+                                    @foreach (var g in MasterMap["Group"])
+                                    {
+                                        <option value="@g.TypeKey">@g.TypeValue</option>
+                                    }
+                                </select>
+                                <label for="group">Group</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="relationship" @bind="contact.Relationship">
+                                    <option disabled>Select relationship</option>
+                                    @foreach (var r in MasterMap["Relationship"])
+                                    {
+                                        <option value="@r.TypeKey">@r.TypeValue</option>
+                                    }
+                                </select>
+                                <label for="relationship">Relationship</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText class="form-control"
+                                           id="homeAddress" @bind-Value="contact.HomeAddress" placeholder="Home Address" />
+                                <label for="homeAddress">Home Address</label>
+                                <ValidationMessage For="@(() => contact.HomeAddress)" class="text-danger small" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <InputText class="form-control"
+                                           id="workAddress" @bind-Value="contact.WorkAddress" placeholder="Work Address" />
+                                <label for="workAddress">Work Address</label>
+                                <ValidationMessage For="@(() => contact.WorkAddress)" class="text-danger small" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phone Numbers Section -->
+                    <h5 class="mt-4 mb-2">Phones</h5>
+
+                    <div class="dropdown mb-3">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Add phone type
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var phoneType in MasterMap["PhoneType"])
+                            {
+                                <li>
+                                    <a class="dropdown-item @(IsPhoneAdded(phoneType) ? "disabled" : "")"
+                                       @onclick="() => AddPhoneWithType(phoneType)">
+                                        @phoneType.TypeValue
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    @if (contact.Phones?.Count > 0)
+                    {
+                        <div>
+                            <h6 class="mb-3">Added Phones:</h6>
+                            <div class="row g-2">
+                                @for (int i = 0; i < contact.Phones.Count; i++)
+                                {
+                                    var phone = contact.Phones[i];
+                                    var phoneIndex = i;
+                                    Master? phoneTypeMaster = MasterMap["PhoneType"].FirstOrDefault(m => m.TypeKey == phone.PhoneType);
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <span class="input-group-text" style="min-width: 100px;">
+                                                @phoneTypeMaster?.TypeValue
+                                            </span>
+                                            <InputText class="form-control"
+                                                       placeholder="Enter number"
+                                                       @bind-Value="phone.Number" />
+                                            <button type="button" class="btn btn-outline-danger"
+                                                    @onclick="() => RemovePhone(phone)">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                        <ValidationMessage For="@(() => contact.Phones[phoneIndex].Number)" class="text-danger small" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Websites Section -->
+
+                    <h5 class="mt-4 mb-2">Websites</h5>
+                    <div class="dropdown mb-3">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Add Website type
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var websiteType in MasterMap["WebsiteType"])
+                            {
+                                <li>
+                                    <a class="dropdown-item @(IsWebsiteAdded(websiteType) ? "disabled" : "")"
+                                       @onclick="() => AddWebsiteWithType(websiteType)">
+                                        @websiteType.TypeValue
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    @if (contact.Websites?.Count() > 0)
+                    {
+                        <div>
+                            <h6 class="mb-3">Added Websites:</h6>
+                            <div class="row g-2">
+                                @for (int i = 0; i < contact.Websites.Count; i++)
+                                {
+                                    var website = contact.Websites[i];
+                                    var websiteIndex = i;
+                                    Master? websiteTypeMaster = MasterMap["WebsiteType"].FirstOrDefault(m => m.TypeKey == website.WebsiteType);
+                                    <div class="col-12">
+                                        <div class="input-group">
+                                            <span class="input-group-text" style="min-width: 100px;">
+                                                @websiteTypeMaster?.TypeValue
+                                            </span>
+                                            <InputText @bind-Value="website.Url" class="form-control"
+                                                       placeholder="Enter url" />
+                                            <button type="button" class="btn btn-outline-danger" @onclick="() => RemoveWebsite(website)">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                        <ValidationMessage For="@(() => contact.Websites[websiteIndex].Url)" class="text-danger small" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i> Save & Close
+                        </button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" @onclick="BackToList">
+                                Back
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </Authorized>
+        <NotAuthorized>
+            <NotAuthorized />
+        </NotAuthorized>
+    </AuthorizeView>
+}
+
+
+

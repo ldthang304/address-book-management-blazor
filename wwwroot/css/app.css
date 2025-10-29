@@ -1,0 +1,76 @@
+/* You can add global styles to this file, and also import other style files */
+/* Reset margin and padding, set box-sizing */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set a comfortable default font and background */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Make images responsive */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Make links look consistent and remove underline by default */
+a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Improve button and input appearance */
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    outline: none;
+    border: none;
+    background: none;
+}
+
+/* Remove list styles */
+ul,
+ol {
+    list-style: none;
+}
+
+/* Tables: collapse borders */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+/* Target input elements with validation classes */
+.form-control.modified.valid {
+    border-color: #28a745;
+}
+.form-control.invalid {
+    border-color: red;
+}
+.form-control.modified.invalid {
+    border-color: #dc3545;
+}
+
+/* Optional: Add focus states */
+.form-control.valid:focus {
+    border-color: deepskyblue;
+}
+
+.form-control.invalid:focus {
+    border-color: #dc3545;
+}

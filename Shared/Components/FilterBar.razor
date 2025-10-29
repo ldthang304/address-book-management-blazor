@@ -1,0 +1,68 @@
+﻿@inject IOrganizationService OrganizationService
+@inject IMasterService MasterService
+@inject FilterService FilterService
+
+
+<EditForm Model="contactFilter" OnValidSubmit="ApplyFilterAsync">
+    <div class="container-fluid bg-white border rounded shadow-sm p-3 d-flex flex-wrap gap-2 align-items-center justify-content-between">
+
+        <InputText class="form-control" placeholder="Name" @bind-Value="contactFilter.NameFilter" style="max-width: 190px;" />
+
+        <InputText class="form-control" placeholder="Job Title" @bind-Value="contactFilter.JobTitleFilter" style="max-width: 190px;" />
+
+        <InputSelect class="form-select" @bind-Value="contactFilter.OrganizationFilter" style="max-width: 190px;">
+            <option value="">Organizations</option>
+            @foreach (var o in organizations)
+            {
+                <option value="@o.Id">@o.Name</option>
+            }
+        </InputSelect>
+
+        <InputSelect class="form-select" @bind-Value="contactFilter.GroupFilter" style="max-width: 190px;">
+            <option value="">Groups</option>
+            @foreach (var g in groups)
+            {
+                <option value="@g.TypeKey">@g.TypeValue</option>
+            }
+        </InputSelect>
+
+        <InputSelect class="form-select" @bind-Value="contactFilter.RelationshipFilter" style="max-width: 190px;">
+            <option value="">Relationships</option>
+            @foreach (var r in relationships)
+            {
+                <option value="@r.TypeKey">@r.TypeValue</option>
+            }
+        </InputSelect>
+
+        <button type="submit" class="btn btn-primary px-4">Apply Filter</button>
+    </div>
+</EditForm>
+
+
+
+@code {
+    //Private fields
+    private List<Organization> organizations = new();
+    private List<Master> groups = new();
+    private List<Master> relationships = new();
+
+    [Parameter] 
+    public EventCallback<ContactFilter> OnFilterApplied { get; set; }
+
+    //Filter model
+    private ContactFilter contactFilter = new();
+
+    //Initialize
+    protected override async Task OnInitializedAsync()
+    {
+        organizations = await OrganizationService.GetAllAsync();
+        groups = await MasterService.GetByTypeNameAsync("Group");
+        relationships = await MasterService.GetByTypeNameAsync("Relationship");
+    }
+    
+    //Send filter back to parent component
+    private async Task ApplyFilterAsync()
+    {
+        await OnFilterApplied.InvokeAsync(contactFilter);
+    }
+}

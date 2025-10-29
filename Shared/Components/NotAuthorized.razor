@@ -1,0 +1,40 @@
+﻿<div class="not-authorized-container">
+    <div class="not-authorized-content">
+        <!-- Animated Lock Icon -->
+        <div class="icon-container">
+            <div class="lock-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <div class="lock-glow"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <h1 class="error-title">Access Denied</h1>
+            <p class="error-message">
+                You don't have permission to view this page.
+                Please contact your administrator or sign in with proper credentials.
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='/login'">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    Sign In
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-lg" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Go Back
+                </button>
+            </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="bg-decorations">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+        </div>
+    </div>
+</div>
+

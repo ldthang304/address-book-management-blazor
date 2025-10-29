@@ -1,0 +1,16 @@
+
+.card[b-z59tb3ncyl] {
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.contact-card-hover:hover[b-z59tb3ncyl] {
+    background-color: lightblue; /* light gray */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.contact-card-hover:hover .edit-icon[b-z59tb3ncyl] {
+    display: inline-block !important;
+}

@@ -1,0 +1,22 @@
+﻿@page "/logout"
+@using AddressBookManagement.Commons.Constants
+@inject NavigationManager NavigationManager
+@inject IToastService ToastService
+
+<h3>Logout</h3>
+
+@code {
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Sign out of external (e.g. Google) authentication scheme
+        await HttpContext?.SignOutAsync(AppConstants.AuthScheme);
+
+        ToastService.ShowSuccess("Logout successfully!");
+
+        // Redirect to home
+        NavigationManager.NavigateTo("/login");
+    }
+}

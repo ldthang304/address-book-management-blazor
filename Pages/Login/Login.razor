@@ -1,0 +1,54 @@
+﻿@page "/login"
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+@inject ILogger<Login> Logger
+@inject IPasswordHasher<AppUser> PasswordHasher
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IAppUserService AppUserService
+@rendermode InteractiveServer
+@layout LoginLayout
+
+@if (currentView == ViewType.Login)
+{
+    <LoginComponent 
+                    Message="@message"
+                    MessageClass="@messageClass"
+                    OnGoogleLogin="HandleGoogleLogin" />
+}
+
+@code {
+    // ===== PROPERTIES =====
+    private ViewType currentView = ViewType.Login;
+    private string message = string.Empty;
+    private string messageClass = string.Empty;
+
+    private void ShowMessage(string msg, bool isError = false)
+    {
+        message = msg;
+        messageClass = isError ? "text-red-600" : "text-green-600";
+        StateHasChanged();
+    }
+
+    private void SwitchView(ViewType newView)
+    {
+        Logger.LogInformation("SwitchView called with: {NewView}", newView);
+        Logger.LogInformation("Current view before switch: {CurrentView}", currentView);
+        currentView = newView;
+        message = string.Empty;
+        Logger.LogInformation("Current view after switch: {CurrentView}", currentView);
+        StateHasChanged();
+    }
+
+    private async Task HandleGoogleLogin()
+    {
+        try
+        {
+            Navigation.NavigateTo("/login-google");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error during Google login");
+            ShowMessage("Google login failed. Please try again.", true);
+        }
+    }
+}

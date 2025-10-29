@@ -1,0 +1,24 @@
+﻿
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Gender', 1, 'Male');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Gender', 2, 'Female');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Relationship', 1, 'Mother');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Relationship', 2, 'Wife');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Relationship', 3, 'Husband');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Relationship', 4, 'Father');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Department', 1, 'Information Technology');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Department', 2, 'Marketing');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Department', 3, 'Multimedia Communication');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Group', 1, 'Close Friends');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Group', 2, 'Co-Workers');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Group', 3, 'Emmergency');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('Group', 4, 'Family');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('PhoneType', 1, 'Mobile');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('PhoneType', 2, 'Work');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('WebsiteType', 1, 'Facebook');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('WebsiteType', 2, 'Instagram');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('WebsiteType', 3, 'Linkedin');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('WebsiteType', 4, 'Twitter');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('SortBy', 1, 'FirstName');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('SortBy', 2, 'LastName');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('SortDirection', 1, 'ASC');
+INSERT INTO Masters (TypeName, TypeKey, TypeValue) VALUES ('SortDirection', 2, 'DESC');

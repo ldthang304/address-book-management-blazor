@@ -1,0 +1,14 @@
+﻿
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<div class="d-flex gap-2">
+    <button class="btn btn-primary" @onclick="GoToAddContact">Add</button>
+</div>
+
+@code {
+    private void GoToAddContact(MouseEventArgs args)
+    {
+        NavigationManager.NavigateTo("/contacts/add");
+    }
+}

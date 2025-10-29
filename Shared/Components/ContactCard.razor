@@ -1,0 +1,72 @@
+﻿
+<div class="card contact-card-hover p-3 d-flex flex-row align-items-center shadow-sm border-0 rounded-4" @onclick="() => OnCardClick.InvokeAsync(Contact)">
+
+    <!-- Favorite Star Button -->
+    <button class="position-absolute top-0 end-0 m-2 @(Contact?.IsFavourite == true ? "btn-pink" : "btn-outline-pink")"
+            @onclick="ToggleFavouriteAsync"
+            @onclick:stopPropagation
+            title="Toggle Favorite">
+        <i class="@(Contact?.IsFavourite == true ? "bi-heart-fill" : "bi-heart") text-danger"></i>
+    </button>
+
+    <!-- Pen Icon (Edit) -->
+    <button class="edit-icon position-absolute top-50 end-0 me-2 d-none"
+            title="Edit Contact"
+            @onclick="NavigateToEditContact"
+            @onclick:stopPropagation>
+        <i class="bi bi-pencil-fill text-info"></i>
+    </button>
+
+    <div class="avatar-circle me-3 flex-shrink-0">
+        <div class="rounded-circle border overflow-hidden" style="width: 60px; height: 60px;">
+            @if (!string.IsNullOrEmpty(Contact?.Image))
+            {
+                <img src="@Contact.Image" alt="contact"
+                     class="w-100 h-100 object-fit-cover" />
+            }
+            else
+            {
+                <!-- Default User Avatar -->
+                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-gradient"
+                     style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="bi bi-person-fill text-white" style="font-size: 1.5rem;"></i>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div>
+        <h6 class="mb-1 fw-semibold text-dark">@($"{Contact?.FirstName} {Contact.LastName}")</h6>
+        <p class="text-muted mb-1 small">@Contact?.JobTitle</p>
+        <p class="mb-0 text-secondary small">
+            <i class="bi bi-envelope me-1 text-primary"></i>@Contact?.PersonalEmail
+        </p>
+    </div>
+</div>
+
+@code {
+    //Accept Contact from Contact List
+    [Parameter]
+    public Contact? Contact { get; set; } 
+
+    //Handle Click Event
+    [Parameter]
+    public EventCallback<Contact> OnCardClick { get; set; }
+    [Inject]
+    private IContactService ContactService { get; set; } = null!;
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = null!;
+
+    private async Task ToggleFavouriteAsync(MouseEventArgs args)
+    {
+        if (!Contact!.IsFavourite.HasValue) {
+            Contact.IsFavourite = true;
+        }
+        Contact?.IsFavourite = !Contact.IsFavourite;
+        await ContactService.UpdateAsync(Contact!);
+    }
+    private void NavigateToEditContact(MouseEventArgs args)
+    {
+        NavigationManager.NavigateTo($"/contacts/{Contact!.Id}");
+    }
+}
